@@ -6,7 +6,6 @@
 ![Accuracy](https://img.shields.io/badge/Accuracy-99.79%25-brightgreen)
 ![ROC-AUC](https://img.shields.io/badge/ROC--AUC-0.9998-green)
 ![Status](https://img.shields.io/badge/Status-Completed-blue)
-![License](https://img.shields.io/badge/License-MIT-lightgrey)
 
 ---
 
@@ -362,12 +361,6 @@ Hybrid Intrusion Detection and Attack Classification System
 University of San Diego
 2026
 ```
-
----
-
-# License
-
-This project is licensed under the MIT License.
 
 ---
 
