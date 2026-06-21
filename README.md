@@ -1,191 +1,388 @@
+# Hybrid Intrusion Detection and Attack Classification System
+
 ![Python](https://img.shields.io/badge/Python-3.10+-blue)
-![Model](https://img.shields.io/badge/Model-Hybrid%20ML%20%28RF%20%2B%20KMeans%20%2B%20XGBoost%29-orange)
-![Accuracy](https://img.shields.io/badge/Accuracy-100%25-brightgreen)
-![AUC](https://img.shields.io/badge/AUC-0.9999-success)
+![Dataset](https://img.shields.io/badge/Dataset-CICIDS2017-orange)
+![Framework](https://img.shields.io/badge/Framework-Hybrid%20Ensemble-success)
+![Accuracy](https://img.shields.io/badge/Accuracy-99.79%25-brightgreen)
+![ROC-AUC](https://img.shields.io/badge/ROC--AUC-0.9998-green)
 ![Status](https://img.shields.io/badge/Status-Completed-blue)
 ![License](https://img.shields.io/badge/License-MIT-lightgrey)
 
-# AI-Based Network Intrusion Detection System (Hybrid Model)
+---
 
-This project presents a **hybrid intrusion detection system (IDS)** that combines:
+# Overview
 
-- Supervised learning (Random Forest)
-- Unsupervised learning (K-Means Clustering)
-- Meta-learning (XGBoost)
+This project presents a **Hybrid Ensemble Intrusion Detection and Attack Classification Framework** that combines supervised learning, unsupervised learning, and ensemble learning techniques for network security analytics.
 
-The goal is to improve detection performance by leveraging both **labeled patterns** and **hidden structures in network traffic**.
+The framework integrates:
+
+- Binary Random Forest Intrusion Detection
+- Kernel PCA + K-Means Clustering
+- Multiclass Random Forest Attack Classification
+- XGBoost Ensemble Learning
+
+Unlike traditional intrusion detection systems that only determine whether traffic is malicious, the proposed framework also performs **attack attribution**, identifying the likely attack family associated with malicious traffic.
+
+The framework was evaluated using the **CICIDS2017** dataset containing over **2.8 million network flows**.
 
 ---
 
-## 📁 Project Overview
+# Key Features
 
-The complete implementation is available in the notebook:
-
-The project follows a **multi-stage machine learning pipeline**:
-
-1. Data preprocessing & feature selection  
-2. Supervised model (Random Forest)  
-3. Unsupervised model (K-Means clustering)  
-4. Feature aggregation  
-5. Final hybrid model (XGBoost)
-
----
-
-## 🧠 Model Architecture
-
-### Model 1 — Random Forest (Supervised)
-
-- Trained on labeled data
-- Outputs:
-  - `rf_pred` → predicted label
-  - `rf_prob` → probability score
+- Binary Intrusion Detection
+- Attack-Type Classification
+- Unsupervised Traffic Analysis
+- Meta-Feature Engineering
+- Stacked Ensemble Learning
+- Attack Probability Estimation
+- Attack Attribution
+- Near Real-Time Deployment Capability
 
 ---
 
-### Model 2 — K-Means (Unsupervised)
+# System Architecture
 
-- Uses PCA-reduced features
-- Clusters traffic into 2 groups
-- Clusters mapped to labels using mean label values
+```text
+CICIDS2017 Dataset
+        │
+        ▼
+Data Preprocessing
+        │
+        ▼
+Feature Selection
+        │
+ ┌──────┼───────────┐
+ │      │           │
+ ▼      ▼           ▼
 
-Generated features:
-- `cluster_pred`
-- `cluster_dist_0`
-- `cluster_dist_1`
+Model 1      Model 2          Model 3
+Binary RF    KPCA+KMeans      Attack-Type RF
 
----
+ │            │                 │
+ ▼            ▼                 ▼
 
-### Model 3 — Hybrid Model (XGBoost)
+rf_pred     cluster_pred    attack_class_pred
+rf_prob     cluster_dist_*  attack_prob_*
 
-- Combines:
-  - Original features
-  - RF outputs
-  - Clustering outputs
-- Uses feature selection + GridSearchCV
+        └──────┬───────┘
+               ▼
 
----
+      Feature Aggregation
 
-## ⚙️ Pipeline Flow
+               ▼
 
-Raw Data → Preprocessing → Random Forest → K-Means → Feature Aggregation → XGBoost (Final Model)
+        XGBoost Ensemble
 
----
+               ▼
 
-## 📊 Results Summary
-
-### Random Forest Decision tree (Supervised)
-
-- Accuracy: ~99%
-- AUC: ~0.99
-- High recall for benign traffic
-- High recall for attack class
-
-### K-Means (Unsupervised)
-
-- Accuracy: ~83%
-- AUC: ~0.65
-- High recall for benign traffic
-- Lower recall for attack class
-
-👉 Provides **pattern-based signals** rather than precise classification
+      Final Intrusion Detection
+      + Attack Attribution
+```
 
 ---
 
-### Final Hybrid Model (XGBoost)
+# Dataset
 
-- Accuracy: ~100%
-- AUC: ~0.9999
-- Near-perfect precision & recall
-- Strong generalization (validated via learning curves and CV)
+**Source:** CICIDS2017
 
----
+After attack consolidation:
 
-## 📈 Key Insights
+| Attack Category | Count |
+|---------------|-----------:|
+| Benign | 2,268,589 |
+| DoS_DDoS | 379,554 |
+| Reconnaissance | 158,804 |
+| Credential_Attack | 15,333 |
+| Malware_Compromise | 1,998 |
+| Web_Attack | 673 |
 
-- Random Forest captures **known attack patterns**
-- K-Means captures **hidden behavioral structure**
-- XGBoost effectively **learns from both signals**
-
-The hybrid approach significantly improves performance over individual models.
-
----
-
-## 🔍 Feature Importance
-
-- `rf_prob` is the most dominant feature
-- Clustering distance features contribute additional signal
-- Hybrid model learns strong interactions between features
+**Total Records:** 2,825,951
 
 ---
 
-## 🚨 Data Leakage Considerations
+# Model Components
 
-To ensure model reliability:
+<details>
+<summary><b>Model 1 — Binary Random Forest</b></summary>
 
-- Cross-validation used
-- Learning curves analyzed
-- Label shuffling test performed
+### Purpose
 
-⚠️ Note:
-Feature generation (RF + clustering) must be done carefully to avoid leakage in production pipelines.
+Detects whether network traffic is:
 
----
+- Benign
+- Attack
 
-## ⚠️ Limitations
+### Generated Meta Features
 
-- Risk of leakage due to stacked features
-- High dependency on engineered features
-- Reduced interpretability
-- Computationally intensive pipeline
-- May not generalize to unseen attack types
+- rf_pred
+- rf_prob
 
----
+### Contribution
 
-## 🚀 Future Work
+Provides supervised attack detection intelligence.
 
-- Build fully leakage-safe pipeline (using sklearn Pipeline)
-- Add deep learning models (LSTM / Autoencoders)
-- Real-time streaming deployment
-- Multi-class attack classification
-- Explainability using SHAP / LIME
-- Handle concept drift in evolving network data
+</details>
 
 ---
 
-## 🛠️ Tech Stack
+<details>
+<summary><b>Model 2 — Kernel PCA + K-Means</b></summary>
 
-- Python
-- Pandas, NumPy
-- Scikit-learn
-- Random forest algorithm
-- Clustering
-- XGBoost
-- Matplotlib
+### Purpose
+
+Discovers hidden traffic patterns through unsupervised learning.
+
+### Generated Meta Features
+
+- cluster_pred
+- cluster_dist_0
+- cluster_dist_1
+
+### Contribution
+
+Provides structural and behavioral traffic intelligence.
+
+</details>
 
 ---
 
-## 🧪 How to Run
+<details>
+<summary><b>Model 3 — Attack-Type Random Forest</b></summary>
 
-1. Clone the repository
-git clone https://github.com/networkenthusiast/AI-Network-Intrusion-Detection.git
+### Purpose
 
-2. Install dependencies
+Performs multiclass attack categorization.
+
+### Categories
+
+- Benign
+- DoS_DDoS
+- Reconnaissance
+- Credential_Attack
+- Malware_Compromise
+- Web_Attack
+
+### Generated Meta Features
+
+- attack_class_pred
+- attack_prob_Benign
+- attack_prob_Credential_Attack
+- attack_prob_DoS_DDoS
+- attack_prob_Malware_Compromise
+- attack_prob_Reconnaissance
+- attack_prob_Web_Attack
+
+### Contribution
+
+Provides attack-family intelligence.
+
+</details>
+
+---
+
+# Final Ensemble Model
+
+The final XGBoost classifier combines:
+
+- Original Network Features
+- Binary Random Forest Outputs
+- Attack-Type Probabilities
+- Kernel PCA + K-Means Outputs
+
+This stacked ensemble architecture integrates:
+
+- Behavioral Information
+- Attack-Type Information
+- Structural Information
+- Raw Traffic Characteristics
+
+into a unified prediction framework.
+
+---
+
+# Performance Summary
+
+## Binary Random Forest
+
+| Metric | Value |
+|----------|--------:|
+| Accuracy | ~99% |
+| ROC-AUC | ~0.99 |
+
+---
+
+## Kernel PCA + K-Means
+
+| Metric | Value |
+|----------|--------:|
+| Accuracy | 83% |
+| ROC-AUC | 0.6566 |
+| Silhouette Score | 0.4893 |
+
+---
+
+## Attack-Type Random Forest
+
+| Metric | Value |
+|----------|--------:|
+| Accuracy | ~100% |
+| Weighted F1 | ~1.00 |
+
+---
+
+## Final Hybrid XGBoost Model
+
+| Metric | Value |
+|----------|--------:|
+| Accuracy | 99.79% |
+| Precision | 1.00 |
+| Recall | 0.99 |
+| F1 Score | 0.99 |
+| ROC-AUC | 0.9998 |
+
+---
+
+# Key Findings
+
+- Hybrid learning significantly outperformed standalone models.
+- Attack-type probabilities were among the most important predictors.
+- Clustering-derived features contributed meaningful structural information.
+- The ensemble achieved extremely low false positive and false negative rates.
+- Learning curves demonstrated strong generalization and minimal overfitting.
+
+---
+
+# Repository Structure
+
+```text
+Hybrid-Intrusion-Detection-System/
+
+├── data/
+├── notebooks/
+│   └── IDS_multiclass_KPCA.ipynb
+│
+├── figures/
+├── report/
+│   └── Technical_Report.pdf
+│
+├── src/
+├── requirements.txt
+├── README.md
+└── .gitignore
+```
+
+---
+
+# Installation
+
+Clone the repository:
+
+```bash
+git clone https://github.com/<username>/<repository>.git
+cd <repository>
+```
+
+Install dependencies:
+
+```bash
 pip install -r requirements.txt
-
-3. pip install -r requirements.txt
-
+```
 
 ---
 
-## 👨‍💻 Author
+# Running the Project
 
-Kalyan Brata Majumder <br>
-Karthik Mekala<br>
+Launch Jupyter Notebook:
 
-Curriculum - MS-Applied AI
+```bash
+jupyter notebook
+```
+
+Open:
+
+```text
+IDS_multiclass_KPCA.ipynb
+```
+
+and execute all cells.
 
 ---
 
-## 📌 Conclusion
+# Deployment Strategy
 
-This project demonstrates how combining **supervised and unsupervised learning** can significantly enhance intrusion detection systems. While the hybrid model achieves excellent performance, careful handling of feature engineering and pipeline design is essential for real-world deployment.
+The framework can be deployed as a real-time intrusion detection service using:
+
+- FastAPI
+- Flask
+- Docker
+- AWS
+- Azure
+- Google Cloud Platform
+
+The architecture supports low-latency inference using CPU-based deployment.
+
+---
+
+# Limitations
+
+- Potential data leakage risks in stacked architectures
+- Severe class imbalance for rare attacks
+- Limited interpretability
+- Validation restricted to CICIDS2017
+- Generalization to zero-day attacks requires further study
+
+---
+
+# Future Work
+
+- Leakage-free stacking pipelines
+- SHAP and LIME explainability
+- Real-time streaming detection
+- Deep Learning Models (LSTM, Autoencoders, Transformers)
+- Concept Drift Detection
+- Cross-Dataset Validation
+
+---
+
+# Authors
+
+### Kalyan Brata Majumder
+
+Network Engineer | MS Applied AI
+
+### Karthik Mekala
+
+MS Applied AI
+
+### Kunal Gurtoo
+
+MS Applied AI
+
+University of San Diego
+
+---
+
+# Citation
+
+```text
+Majumder, K., Mekala, K., Gurtoo, K.
+Hybrid Intrusion Detection and Attack Classification System
+University of San Diego
+2026
+```
+
+---
+
+# License
+
+This project is licensed under the MIT License.
+
+---
+
+# Acknowledgements
+
+- CICIDS2017 Dataset
+- University of San Diego
+- MS in Applied Artificial Intelligence Program
+- Scikit-Learn
+- XGBoost Community
