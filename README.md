@@ -346,19 +346,11 @@ The architecture supports low-latency inference using CPU-based deployment.
 
 # Authors
 
-### Kalyan Brata Majumder
+### Kalyan Brata Majumder | MS Applied AI | University of San Diego
 
-Network Engineer | MS Applied AI
+### Karthik Mekala | MS Applied AI | University of San Diego
 
-### Karthik Mekala
-
-MS Applied AI
-
-### Kunal Gurtoo
-
-MS Applied AI
-
-University of San Diego
+### Kunal Gurtoo  | MS Applied AI | University of San Diego
 
 ---
 
