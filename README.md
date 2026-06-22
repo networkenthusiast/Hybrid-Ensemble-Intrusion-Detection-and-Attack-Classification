@@ -256,15 +256,17 @@ into a unified prediction framework.
 ```text
 Hybrid-Intrusion-Detection-System/
 
-├── data/
-├── notebooks/
-│   └── IDS_multiclass_KPCA.ipynb
+├── Docs/
+|    └──Final-Project-Report-Team-2.pdf
+|
+├── Presentation/
+│   └── Final-Project-Presentation-Team-2.mp4
+|   └── Final-Project-Presentation-Team-2.mp4
 │
-├── figures/
-├── report/
-│   └── Technical_Report.pdf
-│
-├── src/
+├── Final-Project-Notebook-Team-2.html
+|
+├── Final-Project-Notebook-Team-2.ipynb
+|
 ├── requirements.txt
 ├── README.md
 └── .gitignore
